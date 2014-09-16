@@ -1296,6 +1296,318 @@ public function rtk_manager_settings() {
         
         echo $msg;
     }
+
+
+
+
+    ///Allocation Functions
+    public function allocation_home() {
+
+        $data['zone_a_stats'] = $this->zone_allocation_stats('a');
+        $data['zone_b_stats'] = $this->zone_allocation_stats('b');
+        $data['zone_c_stats'] = $this->zone_allocation_stats('c');
+        $data['zone_d_stats'] = $this->zone_allocation_stats('d');
+
+        $data['banner_text'] = 'National';
+        $data['content_view'] = 'rtk/rtk/allocation/allocation_home_view';
+        $data['title'] = 'National Summary: ';
+        $this->load->view("rtk/template", $data);
+    }
+    function zone_allocation_stats($zone) {
+
+        $last_allocation_sql = "SELECT lab_commodity_details.allocated_date 
+        FROM facilities, lab_commodity_details
+        WHERE facilities.facility_code = lab_commodity_details.facility_code
+        AND lab_commodity_details.commodity_id
+        BETWEEN 1 
+        AND 3 
+        AND facilities.Zone =  'Zone $zone'
+        AND lab_commodity_details.allocated >0
+        ORDER BY  `lab_commodity_details`.`allocated_date` DESC 
+        LIMIT 0,1";
+
+        $last_allocation_res = $this->db->query($last_allocation_sql);
+        $last_allocation = $last_allocation_res->result_array();
+
+        $last_allocation_date = $last_allocation[0]['allocated_date'];
+
+        $three_months_ago = date("Y-m-", strtotime("-3 Month "));
+        $three_months_ago .='1';
+
+        $total_facilities_sql = "SELECT count(*) as total_facilities
+        FROM facilities, districts, counties
+        WHERE facilities.district = districts.id
+        AND districts.county = counties.id
+        AND facilities.zone = 'Zone $zone' 
+        AND facilities.rtk_enabled =1";
+
+        $res = $this->db->query($total_facilities_sql);
+        $total_facilities_res = $res->result_array();
+        $total_facilities = $total_facilities_res[0]['total_facilities'];
+
+        $sql1 = "SELECT count(DISTINCT facilities.facility_code) as facilities_allocated
+        FROM lab_commodity_orders, lab_commodity_details, facilities, counties, districts
+        WHERE lab_commodity_orders.id = lab_commodity_details.order_id
+        AND districts.county = counties.id
+        AND lab_commodity_details.allocated > 0
+        AND facilities.zone = 'Zone $zone'
+        AND districts.id = facilities.district
+        AND facilities.facility_code = lab_commodity_orders.facility_code
+        AND facilities.rtk_enabled = 1
+        AND lab_commodity_orders.order_date BETWEEN  '$three_months_ago'AND  NOW()";
+
+        $res = $this->db->query($sql1);
+        $facilities_allocated = $res->result_array();
+
+        $facilities_allocated = $facilities_allocated[0]['facilities_allocated'];
+        $allocation_percentage = $facilities_allocated / $total_facilities * 100;
+        $allocation_percentage = number_format($allocation_percentage, $decimals = 0);
+
+        $facilities_allocated;
+        $zone_stats = array(
+            'total_facilities' => $total_facilities,
+            'facilities_allocated' => $facilities_allocated,
+            'allocation_percentage' => $allocation_percentage,
+            'last_allocation' => $last_allocation_date
+        );
+        return $zone_stats;
+    }
+
+    public function allocation_zone($zone = null) {
+        if (!isset($zone)) {
+            redirect('rtk_management/allocation_home');
+        }
+        $data['counties_in_zone'] = $this->_zone_counties($zone);
+        $data['banner_text'] = 'National';
+        $data['content_view'] = 'rtk/rtk/allocation/allocation_zone_view';
+        $data['title'] = 'National Summary: ';
+        $this->load->view("rtk/template", $data);
+    }
+    function _zone_counties($zone) {
+        $returnable = array();
+        $sql = "select Distinct counties.county, counties.id
+        FROM  facilities,counties,districts
+        WHERE  facilities.Zone = 'Zone $zone'
+        AND facilities.district = districts.id
+        AND districts.county = counties.id
+        order by counties.county";
+
+        $res = $this->db->query($sql);
+        foreach ($res->result_array() as $value) {
+            $allocation_stats = $this->_county_allocation_stats($value['id']);
+
+            array_push($allocation_stats, $value['county']);
+            array_push($allocation_stats, $value['id']);
+            array_push($returnable, $allocation_stats);
+        }
+
+        return $returnable;
+    }
+    private function _county_allocation_stats($county) {
+        /*
+         * We'd like to know the county allocation status for the month
+         */
+
+        // Total Facilities in the county
+
+        $three_months_ago = date("Y-m-", strtotime("-3 Month "));
+        $three_months_ago .='1';
+        $sql = "SELECT count(*) as total_facilities
+        FROM facilities, districts, counties
+        WHERE facilities.district = districts.id
+        AND districts.county = counties.id
+        AND counties.id = $county
+        AND facilities.rtk_enabled =1";
+
+        $sql1 = "SELECT count(DISTINCT facilities.facility_code) as facilities_allocated,
+        lab_commodity_details.allocated_date as last_allocation
+        FROM lab_commodity_orders, lab_commodity_details, facilities, counties, districts
+        WHERE lab_commodity_orders.id = lab_commodity_details.order_id
+        AND districts.county = counties.id
+        AND counties.id = $county
+        AND lab_commodity_details.allocated > 0
+        AND districts.id = facilities.district
+        AND facilities.facility_code = lab_commodity_orders.facility_code
+        AND facilities.rtk_enabled = 1
+        AND lab_commodity_orders.order_date BETWEEN  '$three_months_ago'AND  NOW()
+        ORDER BY lab_commodity_details.allocated_date DESC";
+
+        $res = $this->db->query($sql1);
+        $facilities_allocated = $res->result_array();
+        $last_allocation = $facilities_allocated[0]['last_allocation'];
+        $facilities_allocated = $facilities_allocated[0]['facilities_allocated'];
+
+        $res1 = $this->db->query($sql);
+        $total_facilities = $res1->result_array();
+        $total_facilities = $total_facilities[0]['total_facilities'];
+        $allocation_percentage = $facilities_allocated / $total_facilities * 100;
+        $allocation_percentage = number_format($allocation_percentage, 0);
+
+        $returnable = array('facilities' => $total_facilities,
+            'allocated_facilities' => $facilities_allocated,
+            'allocation_percentage' => $allocation_percentage,
+            'last_allocation' => $last_allocation);
+        return $returnable;
+    }
+
+    public function allocation_county_detail_zoom($county_id) {
+        $ish;
+        $county = counties::get_county_name($county_id);
+        $county_name = Counties::get_county_name($county_id);
+        $data['countyname'] =$county_name['county'];
+
+        $htm = '';
+        $table_body = '';
+
+        $districts_in_county = districts::getDistrict($county_id);
+        $data['districts_in_county'] = $districts_in_county;
+        $htm .= '<ul class="facility-list">';
+        foreach ($districts_in_county as $key => $district_arr)
+            $district = $district_arr['id'];
+        $district_name = $district_arr['district'];
+        $htm .= '<li>' . $district_name . '</li>';
+        $htm .= '<ul class="sub-list">';
+     
+        $three_months_ago = date("Y-m-", strtotime("-1 Month"));
+        $three_months_ago .='1';
+
+        //$beg_date = date('Y-m-d', strtotime("first day of this Month"));
+        $beg_date = date('Y-m', strtotime("-1 Month"));
+        $beg_date.='-01';
+        $end_date = date('Y-m-d', strtotime("last day of previous Month"));
+
+
+
+        $sql = "SELECT facilities.facility_code,lab_commodity_details.id, lab_commodity_details.q_requested, lab_commodity_details.q_received,lab_commodity_details.commodity_id,lab_commodity_details.closing_stock,lab_commodity_details.beginning_bal,
+        facilities.facility_name,lab_commodity_details.allocated,lab_commodity_details.q_used,districts.district,facility_amc.amc,lab_commodities.commodity_name,lab_commodities.unit_of_issue
+        FROM facilities, districts, counties,lab_commodity_orders,lab_commodity_details,facility_amc,lab_commodities
+        WHERE facilities.district = districts.id
+        AND facilities.rtk_enabled = 1
+        AND facilities.facility_code = facility_amc.facility_code
+        AND facility_amc.commodity_id = lab_commodity_details.commodity_id
+        AND counties.id = districts.county
+        AND counties.id = $county_id
+        AND lab_commodity_orders.facility_code = facilities.facility_code
+        AND lab_commodity_orders.id = lab_commodity_details.order_id
+        AND lab_commodity_details.commodity_id = lab_commodities.id
+        AND lab_commodity_details.commodity_id BETWEEN 0 AND 6
+        AND lab_commodity_orders.order_date BETWEEN '$beg_date' AND '$end_date'
+        ORDER BY districts.district,facilities.facility_code  ASC,lab_commodity_details.commodity_id ASC ";
+        $orders = $this->db->query($sql);
+       //echo "<pre>";print_r($orders->result_array());die;
+        foreach ($orders->result_array() as $orders_arr) {
+            $algorithm = ($orders_arr['commodity_id'] < 4) ? "Old-Algorithm" : 'New-Algorithm';
+
+            $order_detail_id = $orders_arr['id'];
+            $q_requested = $orders_arr['q_requested'];
+            $q_received = $orders_arr['q_received'];
+            $commodity_id = $orders_arr['commodity_id'];
+            $closing_stock = $orders_arr['closing_stock'];
+            $q_used = $orders_arr['q_used'];
+            $beginning_bal = $orders_arr['beginning_bal'];
+            $facility_code = $orders_arr['facility_code'];
+            $facility_name = $orders_arr['facility_name'];
+            $allocated = $orders_arr['allocated'];
+            $district_name = $orders_arr['district'];
+            $commodity = $orders_arr['commodity_name'];
+            $unit_of_issue = $orders_arr['unit_of_issue'];
+            //$allocation = '<span class="label label-important">Pending Allocation for  ' . $lastmonth . '</span>';
+
+
+            $commodity_id = $orders_arr['commodity_id'];
+            $amc = $orders_arr['amc'];
+            $amc_4month = $amc * 4;
+            $firstday = date('D dS M Y', strtotime("first day of previous month"));
+            $lastday = date('D dS M Y', strtotime("last day of previous month"));
+            $lastmonth = date('F', strtotime("last day of previous month"));
+            $allocation = '';
+            if ($allocated > 0) {
+                $allocation = '<span class="label label-success">Allocated for  ' . $lastmonth . '</span>';
+            } else {
+                $allocation = '<span class="label label-important">Pending Allocation for  ' . $lastmonth . '</span>';
+                $allocated = ($amc_4month / $unit_of_issue);
+                $allocated = ceil($allocated);
+            }
+            $table_body .= "
+            <tr id=''>
+            <input type='hidden' name='$order_detail_id' value='$order_detail_id' />
+            <td>$facility_code</td>
+            <td>$facility_name</td>
+            <td>$district_name</td>
+            <td>$commodity <br/>$algorithm</td>
+            <td>$q_received</td>
+            <td>$q_used</td>
+            <td>$closing_stock</td>
+            <td>$q_requested</td>
+            <td>$amc</td>
+            <td><input type='text' class='user2' name='allocated_$order_detail_id' value='$allocated'/></td>
+            <td>$q_received</td>
+            <td>$allocation</td>
+            </tr>";
+        }
+//            echo"<table>$table_body</table";die;
+        //  $data['content_view'] = 'allocation_committee/ajax_view/rtk_county_allocation_v';
+        $data['county_id'] = $county_id;
+        $data['table_body'] = $table_body;
+        $data['title'] = "County View";
+//        $data['table_data'] = $this->rtk_county_sidebar();
+        $data['banner_text'] = "Allocate " . $county_name['county'];
+        $data['content_view'] = "rtk/allocation_committee/ajax_view/rtk_county_allocation_datatableonly_v";
+        $this->load->view("rtk/template", $data);
+    }
+
+    function county_allocation($county_id) {
+        $county = Counties::get_county_name($county_id);
+        $countyname = $county['county'];
+        $data['county_name'] = $countyname;
+        $data['banner_text'] = "Allocations in " . $countyname;
+        $data['title'] = $countyname . " County RTK Allocations";
+        $data['content_view'] = "rtk/allocation_committee/ajax_view/county_allocations_v";
+        $data['county_allocation'] = $this->_allocation_county($county_id);
+
+        $this->load->view("rtk/template", $data);
+    }
+
+    public function national_rtk_allocation() {
+        $data['title'] = "National RTK Allocations";
+        $data['banner_text'] = "National RTK Allocations";
+        $data['title'] = " National RTK Allocations";
+        $data['content_view'] = "rtk/allocation_committee/national_rtk_allocations";
+        $data['allocations'] = $this->allocation();
+
+        $this->load->view("rtk/template", $data);
+    }
+    function _allocation_county($county_id) {
+        $three_months_ago = date("Y-m-", strtotime("-3 Month"));
+        $three_months_ago .='1';
+
+        $beg_date = date('Y-m-d', strtotime("first day of previous month"));
+        $end_date = date('Y-m-d', strtotime("last day of previous month"));
+
+        $sql = "SELECT DISTINCT facilities.facility_code,lab_commodity_details.id, lab_commodity_details.q_requested, lab_commodity_details.q_received,lab_commodity_details.commodity_id,lab_commodity_details.closing_stock,lab_commodity_details.beginning_bal,lab_commodity_details.allocated_date,
+        facilities.facility_name,lab_commodity_details.allocated,lab_commodity_details.q_used,districts.district,facility_amc.amc,lab_commodities.commodity_name,lab_commodity_orders.order_date
+        FROM facilities, districts, counties,lab_commodity_orders,lab_commodity_details,facility_amc,lab_commodities
+        WHERE facilities.district = districts.id
+        AND facilities.rtk_enabled = 1
+        AND facilities.facility_code = facility_amc.facility_code
+        AND facility_amc.commodity_id = lab_commodity_details.commodity_id
+        AND counties.id = districts.county
+        AND counties.id = $county_id
+        AND lab_commodity_details.allocated > 1
+        AND lab_commodity_orders.facility_code = facilities.facility_code
+        AND lab_commodity_orders.id = lab_commodity_details.order_id
+        AND lab_commodity_details.commodity_id = lab_commodities.id
+        AND lab_commodity_details.commodity_id BETWEEN 0 AND 3
+        AND lab_commodity_orders.order_date BETWEEN '$three_months_ago' AND NOW()
+        ORDER BY  lab_commodity_orders.order_date, districts.district,facilities.facility_code ASC";
+
+        $res = $this->db->query($sql);
+
+        return $res->result_array();
+    }
+
+
+
     public function trigger_emails() {
         $subject = 'RTK DATA VALIDITY';
         $message = "Dear All,<br/>We would like to bring to your notice the following changes to the system:<br/><ol>
@@ -1546,8 +1858,7 @@ public function rtk_manager_settings() {
         //        $this->load->view('rtk/rtk/rca/county_reporting_view', $data);
         return $data;
     }    
-function partner_commodity_percentages($partner, $commodity, $month) {
-    $partner_id = 7;
+function partner_commodity_percentages($partner, $commodity, $month) {  
         //$q = 'select extract(YEAR_MONTH from lab_commodity_details.created_at)as current_month, lab_commodity_details.commodity_id, lab_commodity_details.q_requested, lab_commodity_details.beginning_bal,lab_commodity_details.q_received,lab_commodity_details.no_of_tests_done,lab_commodity_details.losses,lab_commodity_details.closing_stock,lab_commodity_details.q_received, facilities.partner from facilities, lab_commodity_details where facilities.partner = 7 group by extract(YEAR_MONTH from lab_commodity_details.created_at) ';
         $q = "
         select 
@@ -1566,7 +1877,7 @@ from
     lab_commodity_details,
     lab_commodities
 where
-    facilities.partner = 7
+    facilities.partner = '$partner'
         and lab_commodity_details.facility_code = facilities.facility_code
         and lab_commodity_details.commodity_id = lab_commodities.id
         AND lab_commodities.id ='$commodity'
@@ -2723,6 +3034,39 @@ function _get_rtk_users() {
     $returnable = array_merge($arr, $arr2);       
     return $returnable;
 }
+
+public function allocation($zone = NULL, $county = NULL, $district = NULL, $facility = NULL, $sincedate = NULL, $enddate = NULL) {
+        // function to filter allocation based on multiple parameter
+        // zone, county,district, sincedate,
+        $conditions = '';
+        $conditions = (isset($zone)) ? " AND facilities.Zone = 'Zone $zone'" : '';
+        $conditions = (isset($county)) ? $conditions . " AND counties.id = $county" : $conditions . ' ';
+        $conditions = (isset($district)) ? $conditions . " AND districts.id = $district" : $conditions . ' ';
+        $conditions = (isset($facility)) ? $conditions . " AND facilities.facility_code = $facility" : $conditions . ' ';
+        $conditions = (isset($sincedate)) ? $conditions . " AND lab_commodity_details.allocated_date >= $sincedate" : $conditions . ' ';
+        $conditions = (isset($enddate)) ? $conditions . " AND lab_commodity_details.allocated_date <= $enddate" : $conditions . ' ';
+
+        $sql = "select facilities.facility_name,facilities.facility_code,facilities.Zone, facilities.contactperson,facilities.cellphone, lab_commodity_details.commodity_id,
+        lab_commodity_details.allocated,lab_commodity_details.allocated_date,lab_commodity_orders.order_date,lab_commodities.commodity_name,facility_amc.amc,lab_commodity_details.closing_stock,lab_commodity_details.q_requested
+        from facilities, lab_commodity_orders,lab_commodity_details, counties,districts,lab_commodities,lab_commodity_categories,facility_amc
+        WHERE facilities.facility_code = lab_commodity_orders.facility_code
+        AND lab_commodity_categories.id = 1
+        AND lab_commodity_categories.id = lab_commodities.category
+        AND counties.id = districts.county
+        AND facilities.district = districts.id
+        AND facilities.rtk_enabled = 1
+        and lab_commodities.id = lab_commodity_details.commodity_id
+        and lab_commodities.id = facility_amc.commodity_id
+        and facilities.facility_code = facility_amc.facility_code
+        AND lab_commodity_orders.id = lab_commodity_details.order_id
+        AND lab_commodity_details.commodity_id between 1 AND 3
+        $conditions
+        GROUP BY facilities.facility_code, lab_commodity_details.commodity_id";
+        $res = $this->db->query($sql);
+        $returnable = $res->result_array();      
+        return $returnable;
+        #$nonexistent = "AND lab_commodity_orders.order_date BETWEEN '2014-04-01' AND '2014-04-30'";
+    }
 
 
 
