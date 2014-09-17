@@ -1,8 +1,8 @@
 <div id="tabs">
-	<a id="trend_tab" href="<?php echo base_url().'rtk_management/rtk_manager'; ?>" data-tab="1" class="tab">National Trend</a>
-	<a id="users_tab" href="<?php echo base_url().'rtk_management/rtk_manager_users'; ?>" data-tab="2" class="tab">Users</a>
-	<a id="messaging_tab" href="<?php echo base_url().'rtk_management/rtk_manager_messages'; ?>" data-tab="1" class="tab">Messaging</a>
-	<a id="settings_tab" href="<?php echo base_url().'rtk_management/rtk_manager_settings'; ?>" data-tab="2" class="tab">Settings</a>
+	<a id="losses" href="<?php echo base_url().'rtk_management/partner_stock_status'; ?>" data-tab="1" class="tab">Losses</a>
+	<a id="expiries" href="<?php echo base_url().'rtk_management/partner_stock_status_expiries'; ?>" data-tab="2" class="tab">Expiries</a>
+	<a id="stock_level" href="<?php echo base_url().'rtk_management/partner_stock_level'; ?>" data-tab="1" class="tab">Stock Level</a>
+	<a id="stock_card" href="<?php echo base_url().'rtk_management/partner_stock_card'; ?>" data-tab="2" class="tab">Stock Card</a>
 </div>
 
 

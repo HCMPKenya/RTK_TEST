@@ -10,12 +10,28 @@ $month= substr_replace($month,"", -4);
 $monthyear = $year . '-' . $month . '-1';        
 $englishdate1 = date('F, Y', strtotime('next month'));
 $englishdate = date('F, Y', strtotime($monthyear));
-$option = '';
-$id = $this->session->userdata('user_id');
 $my_month = json_decode($graphdata['month']);
 $count = count($my_month);
 $from_date = $my_month[0];
-$to_date = $my_month[$count-1];
+$to_date = $my_month[$count-1]; 
+$option = '';
+$id = $this->session->userdata('user_id');
+$q = 'SELECT counties.id AS countyid, counties.county
+            FROM rca_county, counties
+            WHERE rca_county.county = counties.id
+            AND rca_county.rca =' . $id;
+$res = $this->db->query($q);
+foreach ($res->result_array() as $key => $value) {
+    $option .= '<option value = "' . $value['countyid'] . '">' . $value['county'] . '</option>';
+}
+$comm = "SELECT lab_commodities.id,lab_commodities.commodity_name FROM lab_commodities,lab_commodity_categories WHERE lab_commodities.category = lab_commodity_categories.id AND lab_commodity_categories.active = '1'";
+$commodities = $this->db->query($comm);
+// s
+$option_comm = '';
+foreach ($commodities->result_array() as $key => $value) {
+    $option_comm .= '<option value = "' . $value['id'] . '">' . $value['commodity_name'] . '</option>';
+}
+
 ?>
 
 <script type="text/javascript" language="javascript" src="<?php echo base_url(); ?>assets/datatable/jquery.dataTables.js"></script>
@@ -30,12 +46,14 @@ $to_date = $my_month[$count-1];
     $(function() {
         $("#grapharea").load("./rtk_management/county_reporting_percentages/" + county / +<?php echo $year . '/' . $month; ?>);
 
-        $('#switch_month').change(function() {
-            var value = $('#switch_month').val();
-            var path = "<?php echo base_url() . 'rtk_management/switch_district/0/rtk_county_admin/'; ?>" + value + "/";
+        $('#switch_commodity').change(function() {
+            var value = $('#switch_commodity').val();
+
+            var path = "<?php echo base_url() . 'rtk_management/switch_commodity/0/partner_stock_level/'; ?>" + value + "/";
 //              alert (path);
             window.location.href = path;
         });
+
     });
 
     function loadPendingFacilities() {
@@ -53,7 +71,8 @@ $to_date = $my_month[$count-1];
 <?php include('side_menu.php');?>
 
 <div class="dash_main" style="width: 80%;float: right; overflow: scroll; height: auto">
-
+    <?php include('top_nav.php');?><br/>
+<hr/>
     <?php
 //echo "<pre>";var_dump($reports);echo "</pre>";
     ?>
@@ -88,11 +107,17 @@ $to_date = $my_month[$count-1];
                 }
                 ?>
        
+  <div style="width:100%;font-size: 12px;height:20px;padding: 10px 10px 10px 10px;margin-bottom:10px;">
+          <!--table><tr><ul class="navtbl top-navigation nav" style="margin-top:0px;float:left;">        
+            <td style="padding:8px;"><a href="<?php echo base_url().'rtk_management/partner_stock_status'; ?>">Losses  </a></td>
+            <td style="padding:8px;"><a href="<?php echo base_url().'rtk_management/partner_stock_status_expiries'; ?>">Expiries  </a></td>
+            <td style="padding:8px;"><a href="<?php echo base_url().'rtk_management/partner_stock_level'; ?>">Stock Levels  </a></td>
+            <td style="padding:8px;"><a href="<?php echo base_url().'rtk_management/partner_stock_card'; ?>">Stock Card</a></td>
 
-        <div id="container" style="min-width: 310px; height: auto; margin: 0 auto"></div>
-        <br/>
-        <hr/>
-        <div id="container_1" style="min-width: 310px; height: auto; margin: 0 auto"></div>
+          </ul>
+          </tr></table-->
+        </div>
+        <div id="container" style="min-width: 310px;padding-top:20px; height: auto; margin: 0 auto"></div>
 
     </div>
 
@@ -118,47 +143,10 @@ $to_date = $my_month[$count-1];
             $(function() {
                 $('#container').highcharts({
                     chart: {
-                        type: 'line'
-                    },
-                    title: {
-                        text: '<?php echo $county . ' Yearly Reporting Trend from  ' . $from_date.' to '. $to_date; ?>'
-                    }, subtitle: {
-                        text: 'Live data reports on RTK'
-                    },
-                    xAxis: {
-                        categories: <?php echo $graphdata['month']; ?>
-                    },
-                    yAxis: {
-                        min: 0,
-                        title: {
-                            text: 'Percentage Complete (%)'
-                        }
-                    },
-                    legend: {
-                        backgroundColor: '#FFFFFF',
-                        reversed: true
-                    },
-                    plotOptions: {
-                        series: {
-                            stacking: 'normal'
-                        }
-                    },
-                    series: [{
-                            name: '% Reported',
-                            data: <?php echo $graphdata['reported']; ?>
-                        }]
-                });
-            });
-        </script>
-          <script type="text/javascript">
-
-            $(function() {
-                $('#container_1').highcharts({
-                    chart: {
                         type: 'column'
                     },
                     title: {
-                         text: '<?php echo $county . ' Yearly Reporting Trend from  ' . $from_date.' to '. $to_date; ?>'
+                        text: '<?php echo ' Yearly Commodity Stock Levels from '. $from_date.' to '. $to_date; ?>'
                     }, subtitle: {
                         text: 'Live data reports on RTK'
                     },
@@ -168,7 +156,7 @@ $to_date = $my_month[$count-1];
                     yAxis: {
                         min: 0,
                         title: {
-                            text: 'No. of Facilities'
+                            text: 'Values'
                         }
                     },
                     legend: {
@@ -177,16 +165,40 @@ $to_date = $my_month[$count-1];
                     },
                     plotOptions: {
                         series: {
-                            stacking: 'normal'
+                            column: 'normal'
                         }
                     },
                     series: [{
-                            name: 'Not reported',
-                            data: <?php echo $graphdata['nonreported_value']; ?>
-                        }, {
-                            name: 'Reported',
-                            data: <?php echo $graphdata['reported_value']; ?>
+                            name: 'Beginning Balance',
+                            data: <?php echo $graphdata['beginning_bal']; ?>
+                        },
+                        {
+                            name: 'Quantity Received',
+                            data: <?php echo $graphdata['qty_received']; ?>
+                        },
+                        {
+                            name: 'Total Tests',
+                            data: <?php echo $graphdata['total_tests']; ?>
+                        },
+                        {
+                            name: 'Losses',
+                            data: <?php echo $graphdata['losses']; ?>
+                        },
+                        {
+                            name: 'Ending Balance',
+                            data: <?php echo $graphdata['ending_bal']; ?>
+                        },
+                        {
+                            name: 'Quantity Requested',
+                            data: <?php echo $graphdata['qty_requested']; ?>
                         }]
+
                 });
             });
         </script>
+<script type="text/javascript">
+$('#losses').removeClass('active_tab');
+$('#expiries').removeClass('active_tab');
+$('#stock_level').addClass('active_tab');
+$('#stock_card').removeClass('active_tab');
+</script>
