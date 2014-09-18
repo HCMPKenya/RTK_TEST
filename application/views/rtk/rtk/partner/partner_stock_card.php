@@ -163,32 +163,32 @@ table tr{
         <div class="table" style="font-size: 100%;padding-top:20px;" align="center">
         	<table>
         		<thead>
-        			<td align="center" style="padding:8px;font-size:15px" ><b>Kit</b></td>
-        			<td align="center" style="padding:8px;font-size:15px" ><b>Beginning Balance</b></td>
-        			<td align="center" style="padding:8px;font-size:15px" ><b>Quantity Received</b></td>
-        			<td align="center" style="padding:8px;font-size:15px" ><b>Used Total</b></td>
-        			<td align="center" style="padding:8px;font-size:15px" ><b>Total Tests done</b></td>
-        			<td align="center" style="padding:8px;font-size:15px" ><b>Losses</b></td>
-        			<td align="center" style="padding:8px;font-size:15px" ><b>Closing Balance</b></td>
-        			<td align="center" style="padding:8px;font-size:15px" ><b>Requested amount</b></td>
-        			<td align="center" style="padding:8px;font-size:15px" ><b>Expiring(6 months)</b></td>
-        			<td align="center" style="padding:8px;font-size:15px" ><b>Days out of stock</b></td>
+        			<td align="center" style="padding:8px;font-size:13px" ><b>Kit</b></td>
+        			<td align="center" style="padding:8px;font-size:13px" ><b>Beginning Balance</b></td>
+        			<td align="center" style="padding:8px;font-size:13px" ><b>Quantity Received</b></td>
+        			<td align="center" style="padding:8px;font-size:13px" ><b>Used Total</b></td>
+        			<td align="center" style="padding:8px;font-size:13px" ><b>Total Tests done</b></td>
+        			<td align="center" style="padding:8px;font-size:13px" ><b>Losses</b></td>
+        			<td align="center" style="padding:8px;font-size:13px" ><b>Closing Balance</b></td>
+        			<td align="center" style="padding:8px;font-size:13px" ><b>Requested amount</b></td>
+        			<td align="center" style="padding:8px;font-size:13px" ><b>Expiring(6 months)</b></td>
+        			<td align="center" style="padding:8px;font-size:13px" ><b>Days out of stock</b></td>
         		</thead>
         		<tbody>
         		<?php foreach ($result as $key => $val) {
         			if ($i ==0) {
 					 echo "<tr>";
         		 }?>
-        			<td align="center" style="padding:8px;font-size:15px;"><?php echo $val['commodity_name']; ?></td>
-        			<td align="center" style="padding:8px;font-size:15px;"><?php echo $val['beg_bal']; ?></td>
-        			<td align="center" style="padding:8px;font-size:15px;"><?php echo $val['qty_received']; ?></td>
-        			<td align="center" style="padding:8px;font-size:15px;"><?php echo $val['qty_used']; ?></td>
-        			<td align="center" style="padding:8px;font-size:15px;"><?php echo $val['test_done']; ?></td>
-        			<td align="center" style="padding:8px;font-size:15px;"><?php echo $val['losses']; ?></td>
-        			<td align="center" style="padding:8px;font-size:15px;"><?php echo $val['closing_stock']; ?></td>
-        			<td align="center" style="padding:8px;font-size:15px;"><?php echo $val['qty_requested']; ?></td>
-        			<td align="center" style="padding:8px;font-size:15px;"><?php echo $val['qty_expiring']; ?></td>
-        			<td align="center" style="padding:8px;font-size:15px;"><?php echo $val['days_out_of_stock']; ?></td> 
+        			<td align="center" style="padding:8px;font-size:13px;"><?php echo $val['commodity_name']; ?></td>
+        			<td align="center" style="padding:8px;font-size:13px;"><?php echo $val['beg_bal']; ?></td>
+        			<td align="center" style="padding:8px;font-size:13px;"><?php echo $val['qty_received']; ?></td>
+        			<td align="center" style="padding:8px;font-size:13px;"><?php echo $val['qty_used']; ?></td>
+        			<td align="center" style="padding:8px;font-size:13px;"><?php echo $val['test_done']; ?></td>
+        			<td align="center" style="padding:8px;font-size:13px;"><?php echo $val['losses']; ?></td>
+        			<td align="center" style="padding:8px;font-size:13px;"><?php echo $val['closing_stock']; ?></td>
+        			<td align="center" style="padding:8px;font-size:13px;"><?php echo $val['qty_requested']; ?></td>
+        			<td align="center" style="padding:8px;font-size:13px;"><?php echo $val['qty_expiring']; ?></td>
+        			<td align="center" style="padding:8px;font-size:13px;"><?php echo $val['days_out_of_stock']; ?></td> 
 				<?php $i++; ?>
 
 			</tr>

@@ -21,6 +21,14 @@ $res_arr1 = $this->db->query($q1);
 foreach ($res_arr1->result_array() as  $value) {
   $districts_option_html .='<option county="'.$value['county'].'" value="'.$value['id'].'">'.$value['district'].'</option>';
 }
+$partners_option_html = "";
+$q2 = 'SELECT ID,name FROM  `partners` ORDER BY  `partners`.`name` ASC ';
+$res_arr2 = $this->db->query($q2);
+foreach ($res_arr2->result_array() as $key => $value) {
+  $partners_option_html .='<option value="'.$value['ID'].'">'.$value['name'].'</option>';
+}
+
+
 
 $thismonthname  = date('F',strtotime("-1 month", time()));
 $prevmonthname = date('F',strtotime("-2 month", time()));
@@ -48,11 +56,19 @@ $(document).ready(function(){
   var val = $('#user_switch').val();
   if(val == 'scmlt'){
   $('#county_switch').attr('disabled','disabled');
-  $('#district_switch').removeAttr('disabled');
+  $('#district_switch').removeAttr('disabled');  
+  $('#partner_switch').attr('disabled','disabled');
   }
   if(val == 'rtk_county_admin'){
   $('#county_switch').removeAttr('disabled');
   $('#district_switch').attr('disabled','disabled');
+
+  $('#partner_switch').attr('disabled','disabled');
+  }
+  if(val == 'rtk_partner_admin'){
+  $('#county_switch').attr('disabled','disabled');
+  $('#district_switch').attr('disabled','disabled');
+  $('#partner_switch').removeAttr('disabled');
   }
   });
 
@@ -61,6 +77,7 @@ $(document).ready(function(){
   var switch_as = $('#user_switch').val();
   var switch_county = $('#county_switch option:selected').val();
   var switch_dist = $('#district_switch').val();
+  var switch_partner = $('#partner_switch').val();
 
 if (switch_dist>0){
   switch_county = $('#district_switch option:selected').attr('county');
@@ -182,12 +199,14 @@ code {
 <div id="fixed-topbar" style="z-index:10;position: fixed; top: 74px;background: #708BA5; width: 100%;padding: 7px 1px 0px 13px;border-bottom: 1px solid #ccc;border-bottom: 1px solid #ccc;border-radius: 4px 0px 0px 4px;">
 <span class="lead" style="color: #ccc;float:left;">Switch Identities</span>
 &nbsp;
-<select id="user_switch" class="form-control" style="width:20%;float:left;margin-left:200px;"><option value="0"> -- Select UserType--</option><option value="scmlt">SCMLT</option><option value="rtk_county_admin">County Administrator</option>
+<select id="user_switch" class="form-control" style="width:15%;float:left;margin-left:200px;"><option value="0"> -- Select UserType--</option><option value="scmlt">SCMLT</option><option value="rtk_county_admin">County Administrator</option><option value="rtk_partner_admin">Partner</option>
 </select>
 &nbsp;
-<select id="county_switch" class="form-control" style="width:20%;float:left"><option value="0"> -- Select County --</option><?php echo $counties_option_html;?></select>
+<select id="county_switch" class="form-control" style="width:15%;float:left"><option value="0"> -- Select County --</option><?php echo $counties_option_html;?></select>
 &nbsp;
-<select id="district_switch" class="form-control" style="width:20%;float:left"><option value="0"> -- Select Sub-County --</option><?php echo $districts_option_html;?></select>
+<select id="district_switch" class="form-control" style="width:15%;float:left"><option value="0"> -- Select Sub-County --</option><?php echo $districts_option_html;?></select>
+&nbsp;
+<select id="partner_switch" class="form-control" style="width:15%;float:left"><option value="0"> -- Select Partner --</option><?php echo $partners_option_html;?></select>
 &nbsp;
 <a href="#" class="btn btn-primary" id="switch_idenity" style="margin-top: 0px;float:left">Go</a>
 </div>

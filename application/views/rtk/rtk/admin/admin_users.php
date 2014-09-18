@@ -26,7 +26,7 @@ foreach ($res_arr1->result_array() as $value) {
 
         $('#users').dataTable({
             "bJQueryUI": false,
-            "bPaginate": true
+            "bPaginate": false
         });
         $('#add_user').click(function() {
             $('#user_add_form').submit();
@@ -47,6 +47,9 @@ foreach ($res_arr1->result_array() as $value) {
     });
 </script>
 <style type="text/css">
+    table{
+        font-size: 13px;
+    }
 
     .dataTables_wrapper{
         margin-left: 16px;
@@ -70,7 +73,8 @@ foreach ($res_arr1->result_array() as $value) {
 
 <div class="tab-content">
     <div class="tab-pane active" id="lA">
-        <h3>Users</h3>
+    <br/>       
+    <br/>
        
         <button data-target="#Add_DMLT" class="btn btn-default" data-toggle="modal">Add user</button>
 
@@ -129,6 +133,7 @@ foreach ($res_arr1->result_array() as $value) {
             <th>User Level</th>
             <th>Sub-County</th>
             <th>County</th>
+            <th>Action</th>
             <th>Delete</th>
             </thead>
             <tbody style="border-top: solid 1px #828274;">
@@ -152,6 +157,7 @@ foreach ($res_arr1->result_array() as $value) {
                             }
                             ?></td>
                         <td><?php echo $value['county']; ?> </td>
+                        <td><?php echo '<a href="user_profile/'.$value['user_id'].'">Manage</a>'; ?></td>
                         <td><a style="color:red;" title="Delete user" href="<?php echo base_url() . 'rtk_management/delete_user_gen/' . $value['user_id'] . '/rtk_manager'; ?>">[x]</a></td>
                     </tr>
                 <script type="text/javascript">
