@@ -64,10 +64,6 @@ box-shadow: 1px 1px 1px 1px #DDD3ED;
 </div>
 <script>
 $(window).load(function() {
-		//var months_no= '12';//load expiries for 12 months by default
-		//var url_='<?php //echo "reports/potential_expiries_reports/".$this->session->userdata('county_id') ?>'+'/'+months_no;
-		//ajax_request_replace_div_content(url_,'#div_potential');
-
 
 $("#potential_e").on('click', function(e){
 		//e.preventDefault();

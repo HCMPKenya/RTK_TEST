@@ -39,32 +39,37 @@
 	<div id="container_monthly"  style="height:60%; width: 50%; margin: 0 auto;float: left"></div>	
 	</div>
 	<div id="log_data_graph"  style="height:60%; width: 50%; margin: 0 auto;float: left"></div>	
+	<?php //echo $graph_data_daily."<br>"."<br>"; ?>
+	<?php //echo $graph_data_monthly."<br>"."<br>"; ?>
+	<?php //echo $graph_log."<br>"."<br>"; ?> 
+	<script>
+	<?php echo $graph_data_daily;?>
+	<?php echo $graph_data_monthly;?>
+	<?php echo $graph_log;?>
+	</script>
 	</div>
+	
 
 <script>
 $(document).ready(function() {
-	<?php echo @$graph_data_daily; ?>
-	<?php echo @$graph_data_monthly; ?>
-	<?php echo @$graph_log; ?>
-	
-
 	$(".ajax_call1").click( function (){
-		
 		$('.modal-dialog').addClass("modal-lg");
 		var body_content='<table class="row-fluid table table-hover table-bordered table-update" width="100%">'+
-		'<thead><tr><th>District Name</th><th>MFL No</th><th>Facility Name</th><th>Level</th><th>Owner</th><th>Date Activated</th></tr></thead>'+
+		'<thead><tr><th>District Name</th><th>MFL No</th><th>Facility Name</th><th>Level</th><th>Type</th><th>Owner</th><th>Date Activated</th></tr></thead>'+
 		'<tbody>'+			   	    
 		'<?php	foreach($get_facility_data as $detail):
 			     $facility_district = $detail['district'];
 				 $facility_code = $detail['facility_code'];							
 				 $facility_name = $detail['facility_name'];
 				 $level= $detail['level'];
+				 $type= $detail['type'];
 				 $owner = $detail['owner'];
 				 $facility_activation_date = $detail['date'];
 				 ;?>'+'<tr><td>'+'<?php echo $facility_district ;?>'+'</td>'
 				 +'<td>'+'<?php echo $facility_code ;?>'+'</td>'
 				 +'<td>'+'<?php echo $facility_name ;?>'+'</td>'
 				 +'<td>'+'<?php echo $level ;?>'+'</td>'
+				 +'<td>'+'<?php echo $type ;?>'+'</td>'
 				 +'<td>'+'<?php echo $owner;?>'+'</td>'
 				 +'<td>'+'<?php echo $facility_activation_date ;?>'+'</td>'
 				 +'</td></tr>'+'<?php endforeach;?>'
@@ -100,7 +105,7 @@ $(document).ready(function() {
          
           }
         }); 
-}
+	}
 	$("#filter").click(function(){
 		var url = "reports/get_sub_county_facility_mapping_data/"+
 				        $("#year_filter").val()+

@@ -119,7 +119,7 @@ id="total_order_balance_value" readonly="readonly" value="<?php echo $drawing_ri
 </div>
 <script>
 $(document).ready(function() {
-	var new_count =count;
+	var new_count =count+1;
 	var drawing_rights_balance=$('#actual_drawing_rights').val();
 	//auto compute the values
 	calculate_totals();
@@ -160,7 +160,7 @@ $(document).ready(function() {
         '<button type="button" class="btn btn-primary add_item"><span class="glyphicon glyphicon-plus"></span>Add</button>');
     });
     // add item modal box
-    $('#main-content').on("change", ".desc", function (){
+    $(document.body).on("change", ".desc", function (){
     var data = $('option:selected', this).attr('special_data');  
 				var code_array = data.split("^");
 				var commodity_id = code_array[0];
@@ -172,9 +172,9 @@ $(document).ready(function() {
 				$('input:hidden[name=commodity_name_]').val($(".desc option:selected").text());
 				$('input:hidden[name=total_commodity_units_]').val(code_array[5]);});
 	// add the item to the order list			
-	$('#main-content').on("click", ".add_item", function (){
+	$(document.body).on("click", ".add_item", function (){
 	 var check_if_the_user_has_selected_a_commodity=$('#desc').val();
-
+//alert(new_count)
 	 if(check_if_the_user_has_selected_a_commodity==0){
 	 	alert("Please select a commodity first");
 	 	return;
@@ -182,37 +182,38 @@ $(document).ready(function() {
 
 	// add the items here to the order form
 	  $("#example" ).dataTable().fnAddData( [ 
-  	 '<input type="hidden" class="commodity_name" name="commodity_name['+new_count+']" value="'+$("#desc option:selected").text()+'" />'+
-          '<input type="hidden" class="commodity_code" name="commodity_code['+new_count+']" value="'+$('input:text[name=commodity_code]').val()+'" />'+
-         '<input type="hidden" class="commodity_id" name="commodity_id['+new_count+']" value="'+$("#desc option:selected").val()+'" />'+
-         '<input type="hidden" class="total_commodity_units" name="total_commodity_units['+new_count+']" value="'+$('input:hidden[name=total_commodity_units_]').val()+'" />'+ 
-         '<input type="hidden" class="unit_cost" name="price['+new_count+']" value="'+$('input:text[name=unit_cost]').val()+'" />'+
-         '<input type="hidden" name="unit_size['+new_count+']" value="'+$('input:text[name=unit_size]').val()+'" />'+
+  	 '<input type="hidden" class="commodity_name" id="commodity_name['+new_count+']" name="commodity_name['+new_count+']" value="'+$(".desc option:selected").text()+'" />'+
+          '<input type="hidden" class="commodity_code" id="commodity_code['+new_count+']" name="commodity_code['+new_count+']" value="'+$('input:text[name=commodity_code]').val()+'" />'+
+         '<input type="hidden" class="commodity_id" id="commodity_id['+new_count+']" name="commodity_id['+new_count+']" value="'+$(".desc option:selected").val()+'" />'+
+         '<input type="hidden" class="total_commodity_units" id="total_commodity_units['+new_count+']" name="total_commodity_units['+new_count+']" value="'+$('input:hidden[name=total_commodity_units_]').val()+'" />'+ 
+         '<input type="hidden" class="unit_cost" id="price['+new_count+']" name="price['+new_count+']" value="'+$('input:text[name=unit_cost]').val()+'" />'+
+         '<input type="hidden" id="unit_size['+new_count+']" name="unit_size['+new_count+']" value="'+$('input:text[name=unit_size]').val()+'" />'+
 							"" + $('input:hidden[name=cat_name]').val() + "" ,  
 							"" + $('input:hidden[name=commodity_name_]').val() + "" , 
 							"" + $('input:text[name=commodity_code]').val() + "" ,
 							"" + $('input:text[name=unit_size]').val() + "" ,
 							"" + $('input:text[name=unit_cost]').val() + "" ,
-						  '' +'<input class="form-control input-small" type="text" name="open['+new_count+']" id="open[]"   value="0"/>',
-							'<input class="form-control input-small" type="text" name="issues['+new_count+']" id="issues[]"   value="0" />',
-							'<input class="form-control input-small" type="text" name="receipts['+new_count+']" id="receipts[]"  value="0" />' ,
-							'<input class="form-control input-small" type="text" name="adjustmentnve['+new_count+']"  value="0"   />' ,
-                            '<input class="form-control input-small" type="text" name="adjustmentpve['+new_count+']"  value="0"   />' ,
-							'<input class="form-control input-small" type="text" name="losses['+new_count+']" value="0"   />' ,
-							'<input class="form-control input-small" type="text" name="closing['+new_count+']" value="0"   />',
-							'<input class="form-control input-small" type="text" name="days['+new_count+']" value="0"   />',
-							'<input class="form-control input-small" type="text" name="amc['+new_count+']" value="0"   />',
-							'<input class="form-control input-small" type="text" value="0" name="suggested['+new_count+']" readonly="yes"  />',
-							'<input class="form-control input-small quantity" type="text" name="quantity['+new_count+']" value="0" />',
-							'<input class="form-control input-small actual_quantity" type="text" name="actual_quantity['+new_count+']" value="0" readonly="yes" />',
-							'<input class="form-control input-small cost" type="text" name="cost['+new_count+']" value="0" readonly="yes" />',
-							'<input type="text" class="form-control input-small" name="comment['+new_count+']" value="N/A"/>'
+						  '' +'<input class="form-control input-small" type="text" name="open['+new_count+']" id="open['+new_count+']"   value="0"/>',
+							'<input class="form-control input-small" type="text" name="issues['+new_count+']" id="issues['+new_count+']"   value="0" />',
+							'<input class="form-control input-small" type="text" name="receipts['+new_count+']" id="receipts['+new_count+']"  value="0" />' ,
+							'<input class="form-control input-small" type="text" name="adjustmentnve['+new_count+']" id="adjustmentnve['+new_count+']"  value="0"   />' ,
+                            '<input class="form-control input-small" type="text" name="adjustmentpve['+new_count+']" id="adjustmentpve['+new_count+']"  value="0"   />' ,
+							'<input class="form-control input-small" type="text" name="losses['+new_count+']" id="losses['+new_count+']" value="0"   />' ,
+							'<input class="form-control input-small" type="text" name="closing['+new_count+']" id="closing['+new_count+']" value="0"   />',
+							'<input class="form-control input-small" type="text" name="days['+new_count+']" id="days['+new_count+']" value="0"   />',
+							'<input class="form-control input-small" type="text" name="amc['+new_count+']" id="amc['+new_count+']" value="0"   />',
+							'<input class="form-control input-small" type="text" value="0" name="suggested['+new_count+']" 	id="suggested['+new_count+']" readonly="yes"  />',
+							'<input class="form-control input-small quantity" type="text" name="quantity['+new_count+']" id="quantity['+new_count+']" value="0" />',
+							'<input class="form-control input-small actual_quantity" type="text" name="actual_quantity['+new_count+']" id="actual_quantity['+new_count+']" value="0" readonly="yes" />',
+							'<input class="form-control input-small cost" type="text" name="cost['+new_count+']" id="cost['+new_count+']" value="0" readonly="yes" />',
+							'<input type="text" class="form-control input-small" name="comment['+new_count+']" id="comment['+new_count+']" value="N/A"/>'
 		]); 
 		new_count=new_count+1;
 		$('#communication_dialog').modal('hide');	
 	});
 	//compute the order totals here
-	$(".quantity").on('keyup', function (){
+	$(document).on('keyup','.quantity', function (){
+		//alert()
 	var selector_object=$(this);
 	var user_input=$(this).val();
 	var total_units=$(this).closest("tr").find(".total_commodity_units").val();
@@ -240,8 +241,8 @@ $(document).ready(function() {
 	// set the order total here
 	calculate_totals();	
 	});// process all the order into a summary table for the user to confirm before placing the order bed_capacity workload
-	$(".test").button().click( function (){
-    var table_data='<div class="row" style="padding-left:2em"><div class="col-md-6"><h4>Order Summary</h4></div></div>'+
+	$('.test').on('click','', function (){
+	var table_data='<div class="row" style="padding-left:2em"><div class="col-md-6"><h4>Order Summary</h4></div></div>'+
     '<div class="row" style="padding-left:2em"><div class="col-md-6">Order Form No</div><div class="col-md-6">'+($("#order_no").val())+'</div></div>'+
     '<div class="row" style="padding-left:2em"><div class="col-md-6">Order Frequency</div><div class="col-md-6">'+($("#order_period option:selected").text())+'</div></div>'+
     '<div class="row" style="padding-left:2em"><div class="col-md-6">In-Patient Bed Days</div><div class="col-md-6">'+($("#bed_capacity").val())+'</div></div>'+
@@ -256,9 +257,13 @@ $(document).ready(function() {
 					"<th>Order Quantity</th>"+
 					"<th>Unit Cost Ksh</th>"+
 					"<th>Total Ksh</th></tr></thead><tbody>";	 	    			
-         $("input[name^=cost]").each(function(i) { 
+        $("input[name^=cost]").each(function(i) { 
+         	//$(document).each('','input[name^=cost]', function (i){
+         var C_name=$(this).closest("tr").find(".commodity_name").val()
+         //alert(C_name);
+         //return;
         table_data +="<tr>" +
-							"<td>" +$(this).closest("tr").find(".commodity_name").val()+ "</td>" +
+							"<td>" +C_name+ "</td>" +
 							"<td>" +$(this).closest("tr").find(".commodity_code").val()+ "</td>" +
 							"<td>" +$(this).closest("tr").find(".quantity").val()+ "</td>" +	
 							"<td>" +number_format($(this).closest("tr").find(".unit_cost").val(), 2, '.', ',')+ "</td>" +	

@@ -47,14 +47,14 @@
                         </h4>
                     </div>
                 </div>
-                <div class="panel panel-default">
+                <!--<div class="panel panel-default">
                     <div class="panel-heading">
                         <h4 class="panel-title">
                             <a data-toggle="collapse" data-parent="#accordion" href="#collapseSix" id="orders"><span class="glyphicon glyphicon-list-alt">
                             </span>Orders</a>
                         </h4>
                     </div>
-                </div>
+                </div>-->
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <h4 class="panel-title">
@@ -140,11 +140,11 @@ $('.page-header').html('Commodity Redistribution');
 ajax_request_replace_div_content('reports/county_donation',"#notification");
 });
 //Orders
-$("#orders").on('click', function(){
+/*$("#orders").on('click', function(){
 active_panel(this);
 $('.page-header').html('Orders');
 ajax_request_replace_div_content('reports/order_listing/subcounty/true',"#notification");
-});
+});*/
 //Program Reports
 $("#program_reports").on('click', function(){
 active_panel(this);

@@ -62,7 +62,7 @@
   				$(".edit_user").attr("disabled", false);
 		});
 		
-		$("#create_new,.edit_user").attr("disabled", "disabled");
+		$(".edit_user").attr("disabled", "disabled");
 		       $('#main-content').on('hidden.bs.modal','#myModal', function () {
 				$("#datatable").hide().fadeIn('fast');
 				// location.reload();

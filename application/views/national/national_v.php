@@ -112,8 +112,6 @@ border-color: #e7e7e7;
 </style>
   </head> 
 <body style="padding-top: 0;">
-     
- 
 	<div class="container-fluid navbar-default navbar-fixed-top" role="navigation" style="background-color:white">
         <div class="container-fluid">
             <div class="navbar-header" id="st-trigger-effects">
@@ -213,133 +211,47 @@ echo $maps; ?>
  <div class="row"> <!-- row 2-->
     <div class="col-md-12" style="margin-left: -10px">
        <div class="panel panel-success">
-       <div class="panel-heading">
-       <h3 class="panel-title" style="display:inline-block;"><div class="county-name" style="display:inline-block"></div>Expiries</h3>
+	       <div class="panel-heading">
+	       	<h3 class="panel-title" style="display:inline-block;"><div class="county-name" style="display:inline-block"></div>Expiries</h3>
+	       </div>
+	       <!--For the Expiries Tab-->
+	       <div class="panel-body" style="height:500px;">
+	       	<ul class='nav nav-tabs'>
+		      <li class="active"><a href="#stracer" data-toggle="tab">Expiries</a></li>
+	      	</ul>
+	      	<div id="myTabContent" class="tab-content">
+      			<div class="row" style="margin-left: 2px">
+	        	<div class="filter row" style="margin-left: 2px;">
+	        	<form class="form-inline" role="form">
+					<select id="ecounty_filter" class="form-control col-md-2 county">
+						<option value="NULL">Select County</option>
+						<?php
+							foreach($counties as $data):
+							    foreach($data as $key=>$name):
+							      echo "<option value='$key'>$name</option>";
+							    endforeach;
+							endforeach;
+						?>
+					</select>   
+					<select id="eyear" class="form-control col-md-2">
+						<option selected="selected" value="NULL">Select Year</option>
+						<option  value="2014">2014</option>
+						<option  value="2013">2013</option>
+					</select> 
+					<div class="col-md-2">
+					<button class="btn btn-sm btn-success ecounty-filter"><span class="glyphicon glyphicon-filter"></span>Filter</button> 
+					</div>
+	
+				</form>
+				</div>
+	        	
+	
+	        </div>
        </div>
-       
-        <div class="row" style="margin-left: 2px">
-       <div class="col-md-6" style="border: 1px solid #DDD;height: 530px; ">
-      
-       <div class="panel-heading">
-       <h4 class="panel-title">Actual Expiries </h4>
-       </div>
-        <div class="panel-body" style="margin-left: 2px">
-      <ul class='nav nav-tabs' id="">
-      <li class="active"><a href="#acounty" data-toggle="tab">County View</a></li>
-      <li class=""><a href="#asubcounty" data-toggle="tab">Sub County View</a></li>
-       </ul>
-       <div id="myTabContent" class="tab-content ">
-            <div  id="acounty" class="tab-pane active fade in">
-       <div class="filter row" style="margin-left: 2px;">
-<form class="form-inline" role="form">
-<select id="ecounty_filter" class="form-control col-md-2 county">
-<option value="NULL">Select County</option>
-<?php
-foreach($counties as $data):
-    foreach($data as $key=>$name):
-      echo "<option value='$key'>$name</option>";
-    endforeach;
-       
-endforeach;
-?>
-</select>   
-<select id="eyear" class="form-control col-md-2">
-<option selected="selected" value="NULL">Select Year</option>
-<option  value="2014">2014</option>
-<option  value="2013">2013</option>
-</select> 
-<div class="col-md-2">
-<button class="btn btn-sm btn-success ecounty-filter"><span class="glyphicon glyphicon-filter"></span>Filter</button> 
-</div>
-
-</form>
-</div>
-       </div> 
-        <div  id="asubcounty" class="tab-pane fade in">
-            <!-- -->
-<div class="filter row" style="margin-left: 2px;">
-<form class="form-inline" role="form">
-<select id="asubcounty_filter" class="form-control col-md-2 subcounty">
-<option value="NULL">Select Sub-County</option>
-</select>
-<select id="asubcounty_facility_filter" class="form-control col-md-3 facility">
-<option value="NULL">Select facility</option>
-</select>   
-<select id="asubcountyyear" class="form-control col-md-2">
-<option selected="selected" value="NULL">Select Year</option>
-<option  value="2014">2014</option>
-<option  value="2013">2013</option>
-</select> 
-<div class="col-md-2">
-<button class="btn btn-sm btn-success asubcounty-filter"><span class="glyphicon glyphicon-filter"></span>Filter</button> 
-</div>
-
-</form>
-</div>
-       </div>   
-      </div>
-       <div id="actual">test</div>
-       </div> 
-        </div> 
-   
-       <div class="col-md-6" style="border: 1px solid #DDD;height: 530px;" >
-      
-       <div class="panel-heading">
-       <h4 class="panel-title">Potential Expiries </h4>
-       </div>
-        <div class="panel-body">
-        <ul class='nav nav-tabs' id="potential_">
-      <li class="active"><a href="#pcounty" data-toggle="tab">County View</a></li>
-      <li class=""><a href="#psubcounty" data-toggle="tab">Sub County View</a></li>
-       </ul>
-       <div id="myTabContent" class="tab-content">
-            <div  id="pcounty" class="tab-pane active fade in">
-       <div class="filter row" style="margin-left: 2px;">
-<form class="form-inline" role="form">
-<select id="pcounty_filter" class="form-control col-md-2 county">
-<option value="NULL">Select County</option>
-<?php
-foreach($counties as $data):
-    foreach($data as $key=>$name):
-      echo "<option value='$key'>$name</option>";
-    endforeach;
-       
-endforeach;
-?>
-</select>   
-<div class="col-md-2">
-<button class="btn btn-sm btn-success pcounty-filter"><span class="glyphicon glyphicon-filter"></span>Filter</button> 
-</div>
-
-</form>
-</div>
-       </div> 
-        <div  id="psubcounty" class="tab-pane fade in">
-                        <!-- -->
-<div class="filter row" >
-<form class="form-inline" role="form">
-<select id="psubcounty_filter" class="form-control col-md-2 subcounty">
-<option value="NULL">Select Sub-County</option>
-</select> 
-<select id="psubcounty_facility_filter" class="form-control col-md-3 facility">
-<option value="NULL">Select facility</option>
-</select>   
-<div class="col-md-2">
-<button class="btn btn-sm btn-success psubcounty-filter"><span class="glyphicon glyphicon-filter"></span>Filter</button> 
-</div>
-<div class="col-md-1">
-<button class="btn btn-sm btn-success psubcounty-download"><span class="glyphicon glyphicon-save"></span>Download</button> 
-</div>
-</form>
-</div>
-            </div>   
-      </div>
-      <div id="potential">test</div>
-       </div>    
-      
-       </div> 
-        </div>
-          
+       		
+	        <div id="actual">test</div>
+	       </div>
+	          
        </div> 
        </div>
  </div> <!-- row 2-->
@@ -477,16 +389,16 @@ endforeach;
 <script>
          //auto run
          var url ='<?php echo base_url()?>';
-         $('#potential_').on('shown.bs.tab', function (e) {
-         $('#potential').html('');
-         });
+        // $('#potential_').on('shown.bs.tab', function (e) {
+        // $('#potential').html('');
+       // });
          $('#actual_').on('shown.bs.tab', function (e) {
          $('#actual').html('');
          });
 
       $('.county-name').html("National "+" &nbsp;");
       ajax_request_replace_div_content('national/expiry/NULL/NULL/NULL/NULL/NULL',"#actual"); 
-      ajax_request_replace_div_content('national/potential/NULL/NULL/NULL/NULL/NULL',"#potential"); 
+      //ajax_request_replace_div_content('national/potential/NULL/NULL/NULL/NULL/NULL',"#potential"); 
       ajax_request_replace_div_content('national/facility_over_view/',"#facilities_rolled_out");
       ajax_request_replace_div_content('national/hcw/',"#hcw_trained");
       ajax_request_replace_div_content('national/stock_level_mos/NULL/NULL/NULL/NULL',"#mos");
@@ -554,7 +466,7 @@ endforeach;
         var baseUrl=json_obj.url;
         dropdown(baseUrl,"county="+county_data[0],".subcounty");
         ajax_request_replace_div_content('national/expiry/NULL/'+county_data[0]+'/NULL/NULL/NULL',"#actual");
-        ajax_request_replace_div_content('national/potential/'+county_data[0]+'/NULL/NULL/NULL/NULL',"#potential"); 
+        //ajax_request_replace_div_content('national/potential/'+county_data[0]+'/NULL/NULL/NULL/NULL',"#potential"); 
         ajax_request_replace_div_content('national/stock_level_mos/'+county_data[0]+'/NULL/NULL/NULL/ALL',"#mos");
         ajax_request_replace_div_content('national/consumption/'+county_data[0]+'/NULL/NULL/NULL',"#consumption");
         ajax_request_replace_div_content('national/get_facility_infor/'+county_data[0]+'/NULL/NULL/NULL',"#facilities");

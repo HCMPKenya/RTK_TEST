@@ -1,7 +1,7 @@
 <?php
 $year = date("Y");
 $county_id = $this -> session -> userdata('county_id');
-$district_id =  $this -> session -> userdata('district_id');
+$district_id_active =  $this -> session -> userdata('district_id');
 
 		  $identifier = $this -> session -> userdata('user_indicator');
 		
@@ -75,7 +75,7 @@ $district_id =  $this -> session -> userdata('district_id');
 						<span class="bold"><?php 
 				echo $county_dashboard_notifications['facility_donations'];?></span>
                   	 <br/>
-                  	 <span id="">Items have been Redistributed</span>
+                  	 <span id="">Items have been donated</span>
                             
                    </div></a>
 		  <?php endif; // Potential Expiries?>
@@ -98,7 +98,7 @@ $district_id =  $this -> session -> userdata('district_id');
 						<span class="bold"><?php 
 				echo $county_dashboard_notifications['potential_expiries'];?></span>
                   	<br/>
-                  	 <span id="">Commodity(ies) Expiring in 6 months</span>
+                  	 <span id="">Commodity (ies) Expiring in 6 months</span>
                             
                    </div></a>
           	
@@ -171,8 +171,9 @@ $district_id =  $this -> session -> userdata('district_id');
 	  <li class="active"><a href="#tracer" data-toggle="tab">Tracer Commodities <?php echo " ($number_of_tracer_items)"; ?></a></li>
       <li class=""><a href="#division" data-toggle="tab">Program Commodities</a></li>
       <!--<li class=""><a href="#cat" data-toggle="tab">Categories</a></li>-->
-      <li class=""><a href="#county" data-toggle="tab">Commodities</a></li>
-      <li class=""><a href="#subcounty" data-toggle="tab">Sub County View</a></li>
+
+   	  <li class=""><a href="#county" data-toggle="tab">Sub County Comparison</a></li>
+     <!--<li class=""><a href="#subcounty" data-toggle="tab">Sub County View</a></li>-->
 </ul>
     <div id="myTabContent" class="tab-content">
  
@@ -186,7 +187,8 @@ $district_id =  $this -> session -> userdata('district_id');
 foreach($district_data as $district_):
         $district_id=$district_->id;
 		$district=$district_->id;
-        $district_name=$district_->district;    
+        $district_name=$district_->district; 
+		
         echo "<option value='$district_id'>$district_name</option>";
 endforeach;
 ?>
@@ -199,7 +201,7 @@ endforeach;
 <option value="NULL">Select Plot value</option>
 <option value="packs">Packs</option>
 <option value="units">Units</option>
-<option value="ksh">KSH</option>
+<!--<option value="ksh">KSH</option>-->
 <option selected="selected" value="mos">Months of stock</option>
 </select>
 <div class="col-md-1">
@@ -215,6 +217,16 @@ endforeach;
       <br>
       <div class="filter row">
       <form class="form-inline" role="form">
+      	<select id="division_name_filter" class="form-control col-md-2">
+				<option selected="selected" value="NULL">Select Program</option>
+				<?php
+				foreach($division_commodities as $division_):
+				        $division_id=$division_->id;
+				        $division_name=$division_->division_name;    
+				        echo "<option value='$division_id'>$division_name</option>";
+				endforeach;
+				?>
+			</select>
 	      	<select id="division_district_filter" class="form-control col-md-2">
 				<option selected="selected" value="NULL">Select Sub-county</option>
 				<?php
@@ -228,21 +240,12 @@ endforeach;
 			<select id="division_facility_filter" class="form-control col-md-3">
 				<option value="NULL">Select Facility</option>
 			</select>  
-		    <select id="division_name_filter" class="form-control col-md-2">
-				<option selected="selected" value="NULL">Select Division</option>
-				<?php
-				foreach($division_commodities as $division_):
-				        $division_id=$division_->id;
-				        $division_name=$division_->division_name;    
-				        echo "<option value='$division_id'>$division_name</option>";
-				endforeach;
-				?>
-			</select>
+		    
 			<select id="division_plot_value_filter" class="form-control col-md-2">
 				<option selected="selected" value="NULL">Select Plot value</option>
 				<option value="packs">Packs</option>
 				<option value="units">Units</option>
-				<option value="ksh">KSH</option>
+				<!--<option value="ksh">KSH</option>-->
 				<option value="mos">Months of stock</option>
 			</select>
 			<div class="col-md-1">
@@ -270,11 +273,13 @@ endforeach;
 ?>
 </select>		
 <select id="county_plot_value_filter" class="form-control col-md-2">
-<option selected="selected" value="NULL">Select Plot value</option>
-<option value="packs">Packs</option>
-<option value="units">Units</option>
-<option value="ksh">KSH</option>
-<option value="mos">Months Of Stock</option>
+
+<option  value="NULL">Select Plot value</option>
+<!--<option value="packs">Packs</option>
+<option value="units">Units</option>-->
+<option selected="selected" value="mos">Months Of Stock</option>
+<!--<option value="ksh">KSH</option>
+-->
 </select>
 <div class="col-md-1">
 <button class="btn btn-sm btn-success county-filter"><span class="glyphicon glyphicon-filter"></span>Filter</button> 
@@ -424,8 +429,7 @@ var drop_down='';
 		//Tracer Filter Button
 		$(".tracer-filter").button().click(function(e) {
         e.preventDefault();
-        var url_ = "reports/get_county_stock_level_new/"+"NULL/"+"NULL/"+
-        $("#tracer_district_filter").val()+"/"+
+        var url_ = "reports/get_county_stock_level_new/"+"NULL/"+"NULL/"+$("#tracer_district_filter").val()+"/"+
         $("#tracer_facility_filter").val()+"/"+
         $("#tracer_plot_value_filter").val()+
         "/1/1";
@@ -459,16 +463,15 @@ var drop_down='';
           });
    
 		$(".county-filter").button().click(function(e) {
-		e.preventDefault();	
-        var url_ = "reports/get_county_stock_level_new/"+
-$("#county_commodity_filter").val()+"/NULL/NULL/NULL/"+$("#county_plot_value_filter").val()+"/1/NULL";	
-		ajax_request_replace_div_content(url_,'.graph_content');	
+			e.preventDefault();	
+
+	        var url_ = "reports/get_county_comparison_graph/"+$("#county_commodity_filter").val()+"/NULL/NULL/NULL/"+$("#county_plot_value_filter").val()+"/1/NULL/group_special";	
+			ajax_request_replace_div_content(url_,'.graph_content');	
           });
           
          $(".county-download").button().click(function(e) {
 		e.preventDefault();	
-        var url_ = "reports/get_county_stock_level_new/"+
-$("#county_commodity_filter").val()+"/NULL/NULL/NULL/"+$("#county_plot_value_filter").val()+"/csv_data";	
+        var url_ = "reports/get_county_stock_level_new/"+$("#county_commodity_filter").val()+"/NULL/NULL/NULL/"+$("#county_plot_value_filter").val()+"/csv_data";	
 		 window.open(url+url_ ,'_blank');	
           });
           

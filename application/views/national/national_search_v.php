@@ -345,7 +345,7 @@ placeholder="FROM" class="form-control input-small col-md-1 clone_datepicker_nor
   </div>  <!-- consumption end row 2 --> 
   </div><!-- end row 3 -->
   <div class="row"><!-- row 4-->
-        <div class="col-md-6"><!-- Actual Expiries -->
+        <div class="col-md-12"><!-- Actual Expiries -->
                  <div class="panel panel-success">
        <div class="panel-heading">
        <h3 class="panel-title"><div class="county-name" style="display:inline-block"></div>Actual Expiries</h3>
@@ -371,42 +371,8 @@ placeholder="FROM" class="form-control input-small col-md-1 clone_datepicker_nor
        <div id="actual">test</div>
        </div> 
        </div>
-       
 
-      </div> <!--Actual Expiries -->
-      <div class="col-md-6">
-      <div class="panel panel-success">
-       <div class="panel-heading">
-       <h3 class="panel-title"><div class="county-name" style="display:inline-block"></div>Potential Expiries </h3>
-       </div>
-        <div class="panel-body" style="height: 500px;">
-
-       <div class="filter row" style="margin-left: 2px;">
-           
-<form class="form-inline" role="form">
-     <select id="duration_filter_" class="form-control col-md-2">
-    <option value="NULL" selected="selected">Select Duration</option>
-    <option value="3">Next 3 months</option>
-    <option value="6">Next 6 months</option>
-    <option value="9">Next 9 months</option>
-    <option value="12">Next 12 months</option>
-</select>
- 
-<div class="col-md-2">
-<button class="btn btn-sm btn-success filter" id="p-filter"><span class="glyphicon glyphicon-filter"></span>Filter</button> 
-</div>
-<div class="col-md-1">
-<button class="btn btn-sm btn-success excel_" id="p-download">
-    <span class="glyphicon glyphicon-save"></span>Download</button> 
-</div>
-</form>
-</div>
- <hr />
-  <div id="potential">test</div>
-      </div>
-     
-       </div>    
-  </div>  <!-- Potential Expiries end row 3 --> 
+  </div>
 </div>
 <div class="row">
                 <div class="col-md-6">
@@ -579,7 +545,7 @@ placeholder="FROM" class="form-control input-small col-md-1 clone_datepicker_nor
         ajax_request_replace_div_content('national/facility_over_view/'+datum.id,"#facilities_rolled_out");
         ajax_request_replace_div_content('national/hcw/'+datum.id,"#hcw_trained"); 
         ajax_request_replace_div_content('national/expiry/NULL/'+datum.id+'/NULL/NULL/NULL',"#actual");
-        ajax_request_replace_div_content('national/potential/'+datum.id+'/NULL/NULL/NULL/NULL',"#potential"); 
+        //ajax_request_replace_div_content('national/potential/'+datum.id+'/NULL/NULL/NULL/NULL',"#potential"); 
         ajax_request_replace_div_content('national/stock_level_mos/'+datum.id+'/NULL/NULL/NULL/ALL',"#mos");
         ajax_request_replace_div_content('national/consumption/'+datum.id+'/NULL/NULL/NULL',"#consumption");
         ajax_request_replace_div_content('national/order/NULL/'+datum.id+'/NULL/NULL/NULL',"#orders");
@@ -591,7 +557,7 @@ placeholder="FROM" class="form-control input-small col-md-1 clone_datepicker_nor
         ajax_request_replace_div_content('national/facility_over_view/NULL/'+datum.id+'/NULL/NULL',"#facilities_rolled_out");
         ajax_request_replace_div_content('national/hcw/NULL/'+datum.id,"#hcw_trained"); 
         ajax_request_replace_div_content('national/expiry/NULL/NULL/'+datum.id+'/NULL/NULL',"#actual");
-        ajax_request_replace_div_content('national/potential/NULL/'+datum.id+'/NULL/NULL/NULL',"#potential"); 
+       // ajax_request_replace_div_content('national/potential/NULL/'+datum.id+'/NULL/NULL/NULL',"#potential"); 
         ajax_request_replace_div_content('national/stock_level_mos/NULL/'+datum.id+'/NULL/NULL/ALL',"#mos");
         ajax_request_replace_div_content('national/consumption/NULL/'+datum.id+'/NULL/NULL',"#consumption");
         ajax_request_replace_div_content('national/order/NULL/NULL/'+datum.id+'/NULL/NULL',"#orders");
@@ -604,7 +570,7 @@ placeholder="FROM" class="form-control input-small col-md-1 clone_datepicker_nor
         ajax_request_replace_div_content('national/facility_over_view/NULL/NULL/'+datum.id+'/NULL',"#facilities_rolled_out");
         ajax_request_replace_div_content('national/hcw/NULL/NULL/'+datum.id,"#hcw_trained"); 
         ajax_request_replace_div_content('national/expiry/NULL/NULL/NULL/'+datum.id+'/NULL',"#actual");
-        ajax_request_replace_div_content('national/potential/NULL/NULL/'+datum.id+'/NULL/NULL',"#potential"); 
+       // ajax_request_replace_div_content('national/potential/NULL/NULL/'+datum.id+'/NULL/NULL',"#potential"); 
         ajax_request_replace_div_content('national/stock_level_mos/NULL/NULL/'+datum.id+'/NULL/ALL',"#mos");
         ajax_request_replace_div_content('national/consumption/NULL/NULL/'+datum.id+'/NULL',"#consumption");
         ajax_request_replace_div_content('national/order/NULL/NULL/NULL/'+datum.id+'/NULL',"#orders");
@@ -622,7 +588,7 @@ placeholder="FROM" class="form-control input-small col-md-1 clone_datepicker_nor
          });
       //auto run
       ajax_request_replace_div_content('national/expiry/NULL/NULL/NULL/NULL/NULL',"#actual"); 
-      ajax_request_replace_div_content('national/potential/NULL/NULL/NULL/NULL/NULL',"#potential"); 
+    //  ajax_request_replace_div_content('national/potential/NULL/NULL/NULL/NULL/NULL',"#potential"); 
       //$('.county-name').html("National "+" &nbsp;");
       ajax_request_replace_div_content('national/facility_over_view/',"#facilities_rolled_out");
       ajax_request_replace_div_content('national/hcw/',"#hcw_trained");

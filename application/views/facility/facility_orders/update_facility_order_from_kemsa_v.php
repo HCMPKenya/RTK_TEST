@@ -35,7 +35,7 @@ Order Quantity = (Monthly Consumption * 4) - Closing Stock</span>
 <input type="hidden" id="actual_drawing_rights" name="actual_drawing_rights" value="<?php echo $order_details[0]['drawing_rights']; ?>" />				
 </div>
 <div class="col-md-2">
-<b>Drawing Rights Available Balance :</b>
+<b>Drawing Rights Balance :</b>
 <input type="text" class="form-control" name="total_order_balance_value" 
 id="total_order_balance_value" readonly="readonly" value="<?php echo ($order_details[0]['drawing_rights']-$order_details[0]['order_total'])?>" />						
 </div>
@@ -143,7 +143,8 @@ id="total_order_balance_value" readonly="readonly" value="<?php echo ($order_det
 </div>
 <script>
 $(document).ready(function() {
-	var new_count =count;
+	
+	var new_count =count+1;
 	var drawing_rights_balance=$('#actual_drawing_rights').val();
 var $table = $('#example');
 //float the headers
@@ -212,12 +213,13 @@ var $table = $('#example');
 	// add the items here to the order form
 	  $("#example" ).dataTable().fnAddData( [
 	  	 '<input type="hidden" name="facility_order_details_id['+new_count+']" value="0" />'+ 
-	  	 '<input type="hidden" class="commodity_name" name="commodity_name['+new_count+']" value="'+$("#desc option:selected").text()+'" />'+
-          '<input type="hidden" class="commodity_code" name="commodity_code['+new_count+']" value="'+$('input:text[name=commodity_code]').val()+'" />'+
-         '<input type="hidden" class="commodity_id" name="commodity_id['+new_count+']" value="'+$("#desc option:selected").val()+'" />'+
+	  	 '<input type="hidden" class="commodity_name" name="commodity_name['+new_count+']" id="commodity_name['+new_count+']" value="'+$("#desc option:selected").text()+'" />'+
+          '<input type="hidden" class="commodity_code" name="commodity_code['+new_count+']" id="commodity_code['+new_count+']" value="'+$('input:text[name=commodity_code]').val()+'" />'+
+         '<input type="hidden" class="commodity_id" name="commodity_id['+new_count+']" id="commodity_id['+new_count+']" value="'+$("#desc option:selected").val()+'" />'+
          '<input type="hidden" class="total_commodity_units" name="total_commodity_units['+new_count+']" value="'+$('input:hidden[name=total_commodity_units]').val()+'" />'+ 
-         '<input type="hidden" class="unit_cost" name="unit_cost['+new_count+']" value="'+$('input:text[name=unit_cost]').val()+'" />'+
+         '<input type="hidden" class="unit_cost" name="unit_cost['+new_count+']" id="unit_cost['+new_count+']" value="'+$('input:text[name=unit_cost]').val()+'" />'+
          '<input type="hidden" name="unit_size['+new_count+']" value="'+$('input:text[name=unit_size]').val()+'" />'+
+         '<input type="hidden" name="amc['+new_count+']" value="0" />'+
 							"" + $('input:hidden[name=cat_name]').val() + "" ,  
 							"" + $("#desc option:selected").text() + "" , 
 							"" + $('input:text[name=commodity_code]').val() + "" ,
@@ -242,7 +244,7 @@ var $table = $('#example');
 		$('#communication_dialog').modal('hide');	
 	});
 	//compute the order totals here
-	$(".quantity").on('keyup', function (){
+	$(document).on('keyup','.quantity', function (){
 	var selector_object=$(this);
 	var user_input=$(this).val();
 	var total_units=$(this).closest("tr").find(".total_commodity_units").val();
@@ -358,6 +360,13 @@ var $table = $('#example');
      $("#total_order_value").val(order_total);
 		
 	}
+	 $(document).bind("mousemove", function(e) { 
+    	
+    	calculate_totals();
+    	
+    	 } )
+    	 
+    	 //$(window).live('mousemove', function(e) { calculate_totals(); }
 	
     
 });//

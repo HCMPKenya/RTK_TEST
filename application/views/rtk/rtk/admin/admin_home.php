@@ -86,8 +86,8 @@ $(document).ready(function(){
                 <li class="col-md-11">
                         
                     <div style="width:100%;height:450px;">
-                        <div id="container" style="min-width: 310px;width:70%;height: 360px;float:left; margin: 0 auto;border: ridge 1px;"></div>
-                        <div style="width:30%;font-size:11px;height: 360px;margin-left:10px ;float:left; margin: 0 auto;border: ridge 1px;overflow:scroll;background:rgba(204, 204, 204, 0.14);" class="span4" >
+                        <div id="container" style="min-width: 310px;width:100%;height: 360px;float:left; margin: 0 auto;border: ridge 1px;"></div>
+                        <!--div style="width:30%;font-size:11px;height: 360px;margin-left:10px ;float:left; margin: 0 auto;border: ridge 1px;overflow:scroll;background:rgba(204, 204, 204, 0.14);" class="span4" >
                         <ul class="unstyled">
                         <?php
                         foreach ($user_logs as $logs) {                            
@@ -111,7 +111,7 @@ $(document).ready(function(){
                             <?php } ?>
                         </ul>
 
-                        </div>
+                        </div-->
                         <div style="margin-top:10px;">
                         Countrywide Progress: <?php echo $reporting_percentage; ?>%
                         <div class="progress">

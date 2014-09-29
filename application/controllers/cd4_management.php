@@ -1138,7 +1138,7 @@ AND district =' . $district . '');
             echo ("NASCOP link is down");
             die;
         }
-        $sql = 'select count(id) as count from `api_gen` where month=' . $month . ' AND year =' . $year;
+        $sql = 'select count(id) as count from `api_gens` where month=' . $month . ' AND year =' . $year;
         $result = $this->db->query($sql);
         $id = $result->result_array();
         $num_rows = $id[0]['count'];

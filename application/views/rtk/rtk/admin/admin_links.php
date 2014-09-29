@@ -3,6 +3,7 @@
 	<a id="users_tab" href="<?php echo base_url().'rtk_management/rtk_manager_users'; ?>" data-tab="2" class="tab">Users</a>
 	<a id="messaging_tab" href="<?php echo base_url().'rtk_management/rtk_manager_messages'; ?>" data-tab="1" class="tab">Messaging</a>
 	<a id="settings_tab" href="<?php echo base_url().'rtk_management/rtk_manager_settings'; ?>" data-tab="2" class="tab">Settings</a>
+	<a id="settings_tab" href="<?php echo base_url().'rtk_management/rtk_manager_activity'; ?>" data-tab="2" class="tab">Activity</a>
 </div>
 
 

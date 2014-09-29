@@ -78,18 +78,26 @@ $(document).ready(function(){
   var switch_county = $('#county_switch option:selected').val();
   var switch_dist = $('#district_switch').val();
   var switch_partner = $('#partner_switch').val();
+  
+  var ending;
+  if(switch_partner!=0){
+    ending = switch_partner;
+  }else{
+    ending = '';
+  }
+
 
 if (switch_dist>0){
   switch_county = $('#district_switch option:selected').attr('county');
 //  switch_county = $('#district_switch:selected').attr('county').val();
 //alert(switch_county);
-var path = "<?php echo base_url() . 'rtk_management/switch_district'; ?>/"+switch_dist+"/"+switch_as+"/0/0/"+switch_county+"/rtk_manager";
+var path = "<?php echo base_url() . 'rtk_management/switch_district'; ?>/"+switch_dist+"/"+switch_as+"/0/0/"+switch_county+"/rtk_manager/";
   window.location.href=path;
 
 
 }
 
-  var path = "<?php echo base_url() . 'rtk_management/switch_district'; ?>/"+switch_dist+"/"+switch_as+"/0/0/"+switch_county+"/rtk_manager";
+  var path = "<?php echo base_url() . 'rtk_management/switch_district'; ?>/"+switch_dist+"/"+switch_as+"/0/0/"+switch_county+"/rtk_manager"+"/"+ending;
 
 //  rtk_management/switch_district/district/switched_as/month/redirect_url/county
   window.location.href=path;

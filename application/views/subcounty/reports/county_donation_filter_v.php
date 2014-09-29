@@ -88,21 +88,16 @@ var drop_down='';
 		$("#facility_filter").show('slow');		
 		}
 		});	
+		
 		$("#county-filter").on('click',function(e) {
-		e.preventDefault();	
-        var url_ = "reports/donation_reports/"+
-        $("#county_year_expired").val()+
-        "/NULL"+
-        "/NULL";	
-		ajax_request_replace_div_content(url_,'.graph_content');	
+			e.preventDefault();	
+	        var url_ = "reports/donation_reports/"+$("#county_year_expired").val()+"/NULL"+"/NULL";	
+			ajax_request_replace_div_content(url_,'.graph_content');	
           });	
 		$("#filter").on('click',function(e) {
-		e.preventDefault();	
-        var url_ = "reports/donation_reports/"+
-        $("#year_expired").val()+
-        "/"+$("#district_filter").val()+
-        "/"+ $("#facility_filter").val();	
-		ajax_request_replace_div_content(url_,'.graph_content');	
+			e.preventDefault();	
+	        var url_ = "reports/donation_reports/"+$("#year_expired").val()+"/"+$("#district_filter").val()+"/"+ $("#facility_filter").val();	
+			ajax_request_replace_div_content(url_,'.graph_content');	
           });
 
 		});

@@ -1,27 +1,18 @@
 <style type="text/css">
-	
 	.panel-body,span:hover,.status_item:hover
 	{ 
-		
 		cursor: pointer !important; 
 	}
-	
 	.panel {
-		
 		border-radius: 0;
-		
 	}
 	.panel-body {
-		
 		padding: 8px;
 	}
 	#addModal .modal-dialog {
-		
 		width: 54%;
 	}
-	
 </style>
-
 <div class="container-fluid">
 	<div class="page_content">
 		<div class="" style="width:65%;margin:auto;">
@@ -39,8 +30,7 @@
 							<div class="panel-body" id="active">
 								<div class="stat_item color_d">
 									<span class="glyphicon glyphicon-user"></span>
-									<span><?php echo($x[1]);?>
-										Active</span>
+									<span><?php echo($x[1]);?>Active</span>
 								</div>
 							</div>
 						</div>
@@ -50,8 +40,7 @@
 							<div class="panel-body" id="inactive">
 								<div class="stat_item color_g">
 									<span class="glyphicon glyphicon-user"></span>
-									<span><?php echo($x[0]); ?>
-										Inactive</span>
+									<span><?php echo($x[0]); ?>Inactive</span>
 								</div>
 							</div>
 						</div>
@@ -135,7 +124,6 @@
 <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" id="myform">
 	<div class="modal-dialog">
 		<div class="modal-content">
-			
 			<div class="modal-header" style="padding-bottom:2px;background: #27ae60;color: white">
 				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
 					&times;
@@ -553,187 +541,158 @@
       $(document).ready(function () {
       	$("#create_new,.edit_user").attr("disabled", 'disabled');
       	
+      	//activates the edit button on click
       	$(".editable").on('click',function() {
-		
-  				$(".edit_user").attr("disabled", false);
+			$(".edit_user").attr("disabled", false);
 		});
-		
       	
       	$('#myModal').on('hidden.bs.modal', function () {
-      			$("#datatable,.modal-content").hide().fadeIn('fast');
-				 location.reload();
-			});
-	$('.dataTables_filter label input').addClass('form-control');
-	$('.dataTables_length label select').addClass('form-control');
-$('#datatable').dataTable( {
-     "sDom": "T lfrtip",
-       "sScrollY": "320px",   
-                    "sPaginationType": "bootstrap",
-                    "oLanguage": {
-                        "sLengthMenu": "_MENU_ Records per page",
-                        "sInfo": "Showing _START_ to _END_ of _TOTAL_ records",
-                    },
-            "oTableTools": {
-                 "aButtons": [
-        "copy",
-        "print",
-        {
-          "sExtends":    "collection",
-					"sButtonText": 'Save',
-					"aButtons":    [ "csv", "xls", "pdf" ]
-        }
-      ],
-      "sSwfPath": "<?php echo base_url(); ?>assets/datatable/media/swf/copy_csv_xls_pdf.swf"
-    }
-    
-  } ); 
-  $('div.dataTables_filter input').addClass('form-control search');
-  $('div.dataTables_length select').addClass('form-control');
-  //populate facilities to drop down depending on district selected
-
-$("#district_name").change(function() {
-    var option_value=$(this).val();
-    
-    if(option_value=='NULL'){
-    $("#facility_name").hide('slow'); 
-    }
-    else{
-var drop_down='';
- var hcmp_facility_api = "<?php echo base_url(); ?>reports/get_facility_json/"+$("#district_name").val();
-  $.getJSON( hcmp_facility_api ,function( json ) {
-     $("#facility_id").html('<option value="NULL" selected="selected">Select Facility</option>');
-      $.each(json, function( key, val ) {
-        drop_down +="<option value='"+json[key]["facility_code"]+"'>"+json[key]["facility_name"]+"</option>"; 
-      });
-      $("#facility_id").append(drop_down);
-    });
-    $("#facility_id").show('slow');   
-    }
-    }); 
-    
-    
-    $("#district_name_edit").change(function() {
-    var option_value=$(this).val();
-    
-    if(option_value=='NULL'){
-    $("#facility_name_edit").hide('slow'); 
-    }
-    else{
-var drop_down='';
- var hcmp_facility_api = "<?php echo base_url(); ?>reports/get_facility_json/"+$("#district_name_edit").val();
-  $.getJSON( hcmp_facility_api ,function( json ) {
-     $("#facility_id_edit").html('<option value="NULL" selected="selected">Select Facility</option>');
-      $.each(json, function( key, val ) {
-        drop_down +="<option value='"+json[key]["facility_code"]+"'>"+json[key]["facility_name"]+"</option>"; 
-      });
-      $("#facility_id_edit").append(drop_down);
-    });
-    $("#facility_id_edit").show('slow');   
-    }
-    }); 
+  			$("#datatable,.modal-content").hide().fadeIn('fast');
+		 	location.reload();
+		});
+		
+		$('.dataTables_filter label input').addClass('form-control');
+		$('.dataTables_length label select').addClass('form-control');
+		
+		$('#datatable').dataTable( {
+			"sDom": "T lfrtip",
+	       	"sScrollY": "320px",   
+            "sPaginationType": "bootstrap",
+            "oLanguage": {"sLengthMenu": "_MENU_ Records per page","sInfo": "Showing _START_ to _END_ of _TOTAL_ records",},
+            "oTableTools": {"aButtons": ["copy","print",{"sExtends":"collection","sButtonText": 'Save',"aButtons":[ "csv", "xls", "pdf" ]}],"sSwfPath": "<?php echo base_url(); ?>assets/datatable/media/swf/copy_csv_xls_pdf.swf"}
+	    
+	  	} ); 
+	  
+	  	$('div.dataTables_filter input').addClass('form-control search');
+	  	$('div.dataTables_length select').addClass('form-control');
+		
+		//populate facilities to drop down depending on district selected
+		$("#district_name").change(function() {
+			var option_value=$(this).val();
+    		if(option_value=='NULL'){
+    			$("#facility_name").hide('slow'); 
+    		}else{
+				var drop_down='';
+ 				var hcmp_facility_api = "<?php echo base_url(); ?>reports/get_facility_json/"+$("#district_name").val();
+ 				$.getJSON( hcmp_facility_api ,function( json ) {
+ 					$("#facility_id").html('<option value="NULL" selected="selected">Select Facility</option>');
+      				$.each(json, function( key, val ) {
+      					drop_down +="<option value='"+json[key]["facility_code"]+"'>"+json[key]["facility_name"]+"</option>"; 
+      				});
+      				$("#facility_id").append(drop_down);
+    			});
+    			$("#facility_id").show('slow');   
+    		}
+    	}); //end of district name change funtion
+  	
+  	$("#district_name_edit").change(function() {
+  		var option_value=$(this).val();
+    	if(option_value=='NULL'){
+    		$("#facility_name_edit").hide('slow'); 
+    	}else{
+    		var drop_down='';
+ 			var hcmp_facility_api = "<?php echo base_url(); ?>reports/get_facility_json/"+$("#district_name_edit").val();
+  			$.getJSON( hcmp_facility_api ,function( json ) {
+  				$("#facility_id_edit").html('<option value="NULL" selected="selected">Select Facility</option>');
+     		 	$.each(json, function( key, val ) {
+     		 		drop_down +="<option value='"+json[key]["facility_code"]+"'>"+json[key]["facility_name"]+"</option>"; 
+      			});
+      			$("#facility_id_edit").append(drop_down);
+    		});
+    		$("#facility_id_edit").show('slow');   
+    	}
+    }); //end of district name edit change function
     
     //handle edits
-$("#test").on('click','.edit',function() {
-	//capture relevant data
-var email = $(this).closest('tr').find('.email').html();
-var phone = $(this).closest('tr').find('.phone').html();
-var district = $(this).closest('tr').find('.district').html();
-var fname = $(this).closest('tr').find('.fname').html();
-var lname = $(this).closest('tr').find('.lname').html();
-//populate dropdown on click and selected current 
-var drop_down='';
-var facility_id=$(this).closest('tr').find('.facility_name').attr('data-attr');
- var hcmp_facility_api = "<?php echo base_url(); ?>reports/get_facility_json_data/"+$(this).closest('tr').find('.district').attr('data-attr');
-  $.getJSON( hcmp_facility_api ,function( json ) {
-     $("#facility_id_edit").html('<option value="NULL" selected="selected">Select Facility</option>');
-      $.each(json, function( key, val ) {
+	$("#test").on('click','.edit',function() {
+		//capture relevant data
+		var email = $(this).closest('tr').find('.email').html();
+		var phone = $(this).closest('tr').find('.phone').html();
+		var district = $(this).closest('tr').find('.district').html();
+		var fname = $(this).closest('tr').find('.fname').html();
+		var lname = $(this).closest('tr').find('.lname').html();
+		
+		//populate dropdown on click and selected current 
+		var drop_down='';
+		var facility_id=$(this).closest('tr').find('.facility_name').attr('data-attr');
+ 		var hcmp_facility_api = "<?php echo base_url(); ?>reports/get_facility_json_data/"+$(this).closest('tr').find('.district').attr('data-attr');
+  		
+  		$.getJSON( hcmp_facility_api ,function( json ) {
+  			$("#facility_id_edit").html('<option value="NULL" selected="selected">Select Facility</option>');
+      		$.each(json, function( key, val ) {
+        		drop_down +="<option value='"+json[key]["facility_code"]+"'>"+json[key]["facility_name"]+"</option>"; 
+      		});
       	
-        drop_down +="<option value='"+json[key]["facility_code"]+"'>"+json[key]["facility_name"]+"</option>"; 
-      });
-      $("#facility_id_edit").append(drop_down);
-      
-      $('#facility_id_edit').val(facility_id)
-    });
-   //fill inputs with relevant data
-$('#email_edit').val(email)
-$('#email_edit').attr('data-id',$(this).closest('tr').find('.email').attr('data-attr'))
-$('#telephone_edit').val(phone)
-$('#fname_edit').val(fname)
-$('#lname_edit').val(lname)
-$('#username_edit').val(email)
-
-$('#user_type_edit').val($(this).closest('tr').find('.level').attr('data-attr'))
-$('#district_name_edit').val($(this).closest('tr').find('.district').attr('data-attr'))
-
-
-
-var drop_down_user='';
-var type_id=$(this).closest('tr').find('.level').attr('data-attr');
- var get_type_json = "<?php echo base_url(); ?>user/get_user_type_json/";
+	      	$("#facility_id_edit").append(drop_down);
+	      	$('#facility_id_edit').val(facility_id)
+    	});
+   		
+   		//fill inputs with relevant data
+		$('#email_edit').val(email)
+		$('#email_edit').attr('data-id',$(this).closest('tr').find('.email').attr('data-attr'))
+		$('#telephone_edit').val(phone)
+		$('#fname_edit').val(fname)
+		$('#lname_edit').val(lname)
+		$('#username_edit').val(email)
+		$('#user_type_edit').val($(this).closest('tr').find('.level').attr('data-attr'))
+		$('#district_name_edit').val($(this).closest('tr').find('.district').attr('data-attr'))
+		
+		var drop_down_user='';
+		var type_id=$(this).closest('tr').find('.level').attr('data-attr');
+ 		var get_type_json = "<?php echo base_url(); ?>user/get_user_type_json/";
  
-  $.getJSON( get_type_json ,function( json ) {
-     $("#user_type_edit_district").html('<option value="NULL" >Select User Type</option>');
-      $.each(json, function( key, val ) {
-      	
-      	drop_down_user +="<option value='"+json[key]["id"]+"'>"+json[key]["level"]+"</option>";
+  		$.getJSON( get_type_json ,function( json ) {
+  			$("#user_type_edit_district").html('<option value="NULL" >Select User Type</option>');
+      		
+      		$.each(json, function( key, val ) {
+      			drop_down_user +="<option value='"+json[key]["id"]+"'>"+json[key]["level"]+"</option>";
       	 
-      });
-      
-      $("#user_type_edit_district").append(drop_down_user);
-      
-      $('#user_type_edit_district').val(type_id)
-    });
-    
+      		});
+      		$("#user_type_edit_district").append(drop_down_user);
+      		$('#user_type_edit_district').val(type_id)
+    	});
+   	
+   		if($(this).closest('tr').find('.status_item').attr('data-attr')=="false"){
+   			$('.onoffswitch-checkbox').prop('checked', false) 	
+		}else if($(this).closest('tr').find('.status_item').attr('data-attr')=="true"){
+			$('.onoffswitch-checkbox').prop('checked', true) 
+		}
 
+		if($(this).closest('tr').find('.facility_name').attr('data-attr')==""){
+			$("#facility_id_edit").attr("disabled", "disabled"); 
+		}
 
-if($(this).closest('tr').find('.status_item').attr('data-attr')=="false"){
-	$('.onoffswitch-checkbox').prop('checked', false) 	
-}else if($(this).closest('tr').find('.status_item').attr('data-attr')=="true"){
-	$('.onoffswitch-checkbox').prop('checked', true) 
-}
-
-if($(this).closest('tr').find('.facility_name').attr('data-attr')==""){
-	$("#facility_id_edit").attr("disabled", "disabled"); 
-}
-
-$('#facility_id_edit_district').val(facility_id)
+		$('#facility_id_edit_district').val(facility_id)
 
   });
   
   //make sure email==username  for edits
   $('#email_edit').keyup(function() {
-
-  var email = $('#email_edit').val()
-
-   $('#username_edit').val(email)
-   
-   $('#username').val(email)
-   $.ajax({
+  	var email = $('#email_edit').val()
+   	$('#username_edit').val(email)
+   	$('#username').val(email)
+   	
+   	$.ajax({
       type: "POST",
       dataType: "json",
       url: "<?php echo base_url()."user/check_user_json";?>", //Relative or absolute path to response.php file
       data:{ 'email': $('#email_edit').val()},
       success: function(data) {
         if(data.response=='false'){
-						
-						 $('.err').html(data.msg);
-							$( '.err' ).addClass( "alert-danger alert-dismissable" );
-							$(".edit_user,#create_new").attr("disabled", "disabled");
-							}else if(data.response=='true'){
-								
-								$(".err").empty();
-								$(".err").removeClass("alert-danger alert-dismissable");
-								$( '.err' ).addClass( "alert-success alert-dismissable" );
-								$(".edit_user,#create_new").attr("disabled", false);
-								$('.err').html(data.msg);
-								
-								
-							}
+        	$('.err').html(data.msg);
+			$( '.err' ).addClass( "alert-danger alert-dismissable" );
+			$(".edit_user,#create_new").attr("disabled", "disabled");
+		}else if(data.response=='true'){
+			$(".err").empty();
+			$(".err").removeClass("alert-danger alert-dismissable");
+			$( '.err' ).addClass( "alert-success alert-dismissable" );
+			$(".edit_user,#create_new").attr("disabled", false);
+			$('.err').html(data.msg);
+		}
       }
     });
     return false;
-
-    })
+	})
     
    //Handle adding new users 
    $("#add_new").on('click',function() {
@@ -856,48 +815,38 @@ $("#create_new").click(function() {
         }); 
         
 }
-$(".edit_user").click(function() {
-
-      var div="#process";
-      var url = "<?php echo base_url()."user/edit_user";?>";
-      ajax_post (url,div);
-           
+	//WhenEditing Users
+	$(".edit_user").click(function() {
+		var div="#process";
+      	var url = "<?php echo base_url()."user/edit_user";?>";
+      	ajax_post (url,div);
     });
 
    function ajax_post (url,div){
-    var url =url;
-
-     //alert(url);
-    // return;
-     var loading_icon="<?php echo base_url().'assets/img/Preloader_4.gif' ?>";
-     $.ajax({
-          type: "POST",
-          data:{ 'fname_edit': $('#fname_edit').val(),'lname_edit': $('#lname_edit').val(),
+   	var url =url;
+	var loading_icon="<?php echo base_url().'assets/img/Preloader_4.gif' ?>";
+ 	$.ajax({
+ 		type: "POST",
+      	data:{ 'fname_edit': $('#fname_edit').val(),'lname_edit': $('#lname_edit').val(),
           'telephone_edit': $('#telephone_edit').val(),'email_edit': $('#email_edit').val(),
           'username_edit': $('#username_edit').val(),'facility_id_edit_district': $('#facility_id_edit_district').val(),
           'user_type_edit_district': $('#user_type_edit_district').val(),'district_name_edit': $('#district_name_edit').val(),
 			'facility_id_edit': $('#facility_id_edit').val(),'status': $('.onoffswitch-checkbox').prop('checked'),'user_id':$('#email_edit').attr('data-id')},
-          url: url,
-          beforeSend: function() {
-            //$(div).html("");
+      	url: url,
+      	beforeSend: function() {
+      		//$(div).html("");
             var answer = confirm("Are you sure you want to proceed?");
-        if (answer){
-            $('.modal-body').html("<img style='margin:30% 0 20% 42%;' src="+loading_icon+">");
-        } else {
-            return false;
-        }
-             
-            
-          },
-          success: function(msg) {
-          //success message
-          
-          setTimeout(function () {
-          	$('.modal-body').html("<div class='bg-warning' style='height:30px'>"+
-							"<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>×</button>"+
-							"<h3>Success Your records were Edited. Please Close to continue</h3></div>")
-							$('.modal-footer').html("<button type='button' class='btn btn-default' data-dismiss='modal'>Close</button>")
-				
+        	if (answer){
+        		$('.modal-body').html("<img style='margin:30% 0 20% 42%;' src="+loading_icon+">");
+        	} else {
+            	return false;
+        	}
+       },success: function(msg) {
+       	setTimeout(function () {
+       		$('.modal-body').html("<div class='bg-warning' style='height:30px'>"+
+       		"<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>×</button>"+
+			"<h3>Success Your records were Edited. Please Close to continue</h3></div>")
+			$('.modal-footer').html("<button type='button' class='btn btn-default' data-dismiss='modal'>Close</button>")
         }, 4000);
         
               

@@ -298,9 +298,9 @@ legend{
 			  		<legend>View as</legend>
 			  		
 			  		<section class="col-md-6">
-							<section class="col-md-3">
+							<!--<section class="col-md-3">
 							<input type="radio" name="doctype" value="PDF" class=" " checked/> PDF
-						</section>
+						</section>-->
 						<section class="col-md-3">
 							<input type="radio" name="doctype" value="Excel"/> Excel
 						</section>
@@ -308,9 +308,9 @@ legend{
 						<section class="col-md-3">
 							<input type="radio" name="doctype" value="Graph"/> Web Graph
 						</section>
-						<section class="col-md-3">
+						<!--<section class="col-md-3">
 							<input type="radio" name="doctype" value="Table"/> Web Table
-						</section>
+						</section>-->
 						</section>
 			  	</fieldset>
 			  	
